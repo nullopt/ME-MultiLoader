@@ -140,7 +140,7 @@ if API.Read_LoopyLoop() then
         -- check what scripts to load from the checkbox values - runs every 100ms
         if TIMER:shouldRun("LOAD_SCRIPTS_LOOP") then
             MultiLoader:loadScripts()
-            TIMER:createSleep("LOAD_SCRIPTS_LOOP", 1000 / MultiLoader.loopDelay)
+            TIMER:createSleep("LOAD_SCRIPTS_LOOP", 10 / MultiLoader.loopDelay)
         end
 
         -- loop through all the loaded scripts and call their loop function
