@@ -1,5 +1,9 @@
+---@class Timer
+---@field timers table<string, number>
+---@field tasks table<string, {executeTime: number, func: function}>
 local Timer = {
-    timers = {}
+    timers = {},
+    tasks = {},
 }
 
 function Timer:getTimerCount()
@@ -54,6 +58,26 @@ function Timer:createSleep(name, duration)
     local time = os.clock() + duration
     self.timers[name] = time
     return time
+end
+
+--- Schedule a task to be executed after a specified delay
+---@param name string: The name of the task
+---@param delay number: The delay in milliseconds
+---@param func function: The function to execute
+function Timer:scheduleTask(name, delay, func)
+    local executeTime = os.clock() + (delay / 1000)
+    self.tasks[name] = { executeTime = executeTime, func = func }
+end
+
+--- Run scheduled tasks that are due
+function Timer:runScheduledTasks()
+    local currentTime = os.clock()
+    for name, task in pairs(self.tasks) do
+        if currentTime >= task.executeTime then
+            task.func()
+            self.tasks[name] = nil
+        end
+    end
 end
 
 return Timer

@@ -1,0 +1,3 @@
+[submodule "ME-EventSystem"]
+	path = ME-EventSystem
+	url = https://github.com/nullopt/ME-EventSystem.git

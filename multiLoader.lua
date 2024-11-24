@@ -7,13 +7,16 @@ local SCRIPT_MAP = require("scriptMap")
 local API = require("api")
 local GUI = require("ui.gui")
 local TIMER = require("utilities.timer")
+local EVENTS = require("ME-EventSystem.events")
 
 ---@class ScriptClass
 ---@field scriptName string
 ---@field state string
 ---@field gui GUI
 ---@field init function(gui: GUI)
+---@field unload function()
 ---@field draw function()
+---@field getState function()
 ---@field loop function()
 local ScriptClass = {}
 
@@ -104,6 +107,10 @@ function MultiLoader:loadScripts()
                     if alreadyLoaded then
                         -- unload the script
                         print("Unloading " .. scriptName)
+                        if MultiLoader.loadedScripts[scriptName].unload then
+                            -- call the unload function of the script to cleanup
+                            MultiLoader.loadedScripts[scriptName]:unload()
+                        end
                         MultiLoader.loadedScripts[scriptName] = nil
                         package.loaded[scriptPath] = nil
                         _G[scriptPath] = nil
@@ -127,6 +134,10 @@ if API.Read_LoopyLoop() then
     -- init the gui
     MultiLoader:initGui()
     while API.Read_LoopyLoop() do
+        -- track game events
+        EVENTS:trackEvents()
+        -- run scheduled tasks when they are due
+        TIMER:runScheduledTasks()
         --[[
             TODO: handle termination from the gui.
             it should check what script called the termination and then unload it.
