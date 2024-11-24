@@ -41,6 +41,8 @@ A module for creating and managing the GUI. It provides functions to create and 
 
 - **Fungus Ash Generator**: Automates the collection of glowing fungus and conversion to ashes.
 
+- **Wilderness Agility**: Automates the wilderness agility course, using the event system to manage the state of the script.
+
 
 ## Getting Started
 
